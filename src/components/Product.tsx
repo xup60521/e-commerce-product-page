@@ -6,6 +6,7 @@ import Thumb3 from "@/assets/images/image-product-3-thumbnail.jpg";
 import Image3 from "@/assets/images/image-product-3.jpg";
 import Thumb4 from "@/assets/images/image-product-4-thumbnail.jpg";
 import Image4 from "@/assets/images/image-product-4.jpg";
+import ProductThumb from "/image-product-1-thumbnail.jpg";
 import Plus from "@/assets/images/icon-plus.svg?react";
 import Minus from "@/assets/images/icon-minus.svg?react";
 import { IoCartOutline } from "react-icons/io5";
@@ -13,6 +14,7 @@ import { IoClose } from "react-icons/io5";
 import { FaChevronLeft } from "react-icons/fa";
 import { FaChevronRight } from "react-icons/fa";
 import { Fragment, useState } from "react";
+import { useCartItem } from "./CartItemProvider";
 
 const images = [
     {
@@ -52,13 +54,36 @@ export default function Product() {
 }
 
 function ProductDetail() {
+    const [count, setCount] = useState(0);
+    const [, setCartItems] = useCartItem();
+    const name = "Fall Limited Edition Sneakers";
+    const price = 125;
+    function handleAddToCart() {
+        setCartItems((prev) => {
+            const index = prev.findIndex((d) => d.name === name);
+            if (index === -1) {
+                return [
+                    ...prev,
+                    {
+                        name,
+                        price,
+                        quantity: count,
+                        photo: ProductThumb,
+                    },
+                ];
+            }
+            prev[index].quantity += count;
+            return [...prev];
+        });
+        setCount(0);
+    }
     return (
         <div className="flex flex-col lg:w-[60%] justify-center lg:pl-[10%] px-6 lg:py-0 py-2">
             <span className="font-kumbh text-e_dark_grayish_blue font-semibold tracking-wider py-4 text-sm">
                 {"Sneaker Company".toUpperCase()}
             </span>
             <h2 className="lg:text-[2.5rem] text-3xl font-kumbh font-bold leading-10">
-                Fall Limited Edition Sneakers
+                {name}
             </h2>
             <p className="font-kumbh text-e_dark_grayish_blue lg:py-8 pt-4 pb-8">
                 These low-profile sneakers are your perfect casual wear
@@ -68,7 +93,7 @@ function ProductDetail() {
             <div className="flex lg:flex-col flex-row lg:items-start items-end justify-between gap-2 lg:-mt-2">
                 <div className="flex gap-4 items-end">
                     <span className="font-kumbh font-bold text-lg">
-                        $125.00
+                        ${price.toFixed(2)}
                     </span>
                     <span className="text-xs h-fit font-kumbh bg-black px-2 py-1 rounded-md text-white">
                         50%
@@ -80,19 +105,28 @@ function ProductDetail() {
             </div>
             <div className="flex lg:flex-row flex-col items-center gap-4 py-8 pb-20">
                 <div className="flex items-center overflow-hidden flex-shrink-0 bg-e_light_grayish_blue rounded-lg lg:w-fit w-full">
-                    <button className="px-3 py-4 transition hover:opacity-50">
+                    <button
+                        className="px-3 py-4 transition hover:opacity-50"
+                        onMouseDown={() => setCount(count > 0 ? count - 1 : 0)}
+                    >
                         <Minus />
                         <span className="sr-only">decrement 1 item</span>
                     </button>
                     <span className="px-6 font-kumbh text-black text-sm font-bold lg:flex-grow-0 flex-grow text-center">
-                        0
+                        {count}
                     </span>
-                    <button className="px-3 py-4 transition hover:opacity-50">
+                    <button
+                        className="px-3 py-4 transition hover:opacity-50"
+                        onMouseDown={() => setCount(count + 1)}
+                    >
                         <Plus />
                         <span className="sr-only">increment 1 item</span>
                     </button>
                 </div>
-                <button className="bg-e_orange flex-grow lg:w-fit w-full font-kumbh flex items-center justify-center gap-4 h-full rounded-lg font-bold transition hover:opacity-70 py-3 drop-shadow-md shadow-e_orange">
+                <button
+                    className="bg-e_orange flex-grow lg:w-fit w-full font-kumbh flex items-center justify-center gap-4 h-full rounded-lg font-bold transition hover:opacity-70 py-4 drop-shadow-md shadow-e_orange"
+                    onMouseDown={handleAddToCart}
+                >
                     <IoCartOutline />
                     <span className="font-kumbh text-sm">Add to cart</span>
                 </button>
@@ -127,37 +161,37 @@ function DisplayImages(props: {
                     />
                     <span className="sr-only">open lightbox</span>
                     <button
-                            className="absolute left-0 top-[50%] -translate-y-[50%] translate-x-[25%] lg:hidden bg-white size-10 rounded-full flex items-center justify-center text-lg transition hover:text-e_orange"
-                            onMouseDown={() =>
-                                setSelectedImage(
-                                    selectedImage === 0
-                                        ? 3
-                                        : ((selectedImage - 1) as SelectedImage)
-                                )
-                            }
-                        >
-                            <FaChevronLeft />
-                            <span className="sr-only">preview image</span>
-                        </button>
-                        <button
-                            className="absolute right-0 top-[50%] -translate-y-[50%] -translate-x-[25%] lg:hidden bg-white size-10 rounded-full flex items-center justify-center text-lg transition hover:text-e_orange"
-                            onMouseDown={() =>
-                                setSelectedImage(
-                                    selectedImage === 3
-                                        ? 0
-                                        : ((selectedImage + 1) as SelectedImage)
-                                )
-                            }
-                        >
-                            <FaChevronRight />
-                            <span className="sr-only">next image</span>
-                        </button>
+                        className="absolute left-0 top-[50%] -translate-y-[50%] translate-x-[25%] lg:hidden bg-white size-10 rounded-full flex items-center justify-center text-lg transition hover:text-e_orange"
+                        onMouseDown={() =>
+                            setSelectedImage(
+                                selectedImage === 0
+                                    ? 3
+                                    : ((selectedImage - 1) as SelectedImage)
+                            )
+                        }
+                    >
+                        <FaChevronLeft />
+                        <span className="sr-only">preview image</span>
+                    </button>
+                    <button
+                        className="absolute right-0 top-[50%] -translate-y-[50%] -translate-x-[25%] lg:hidden bg-white size-10 rounded-full flex items-center justify-center text-lg transition hover:text-e_orange"
+                        onMouseDown={() =>
+                            setSelectedImage(
+                                selectedImage === 3
+                                    ? 0
+                                    : ((selectedImage + 1) as SelectedImage)
+                            )
+                        }
+                    >
+                        <FaChevronRight />
+                        <span className="sr-only">next image</span>
+                    </button>
                 </button>
                 <div className="lg:grid grid-cols-4 gap-6 hidden">
                     {images.map((item, index) => (
                         <button
                             key={`imagesdsdasd ${item.lg_photo}`}
-                            className={`rounded-xl overflow-hidden transition ring-2 bg-white ${
+                            className={`rounded-xl overflow-hidden hover:opacity-50 transition ring-2 bg-white ${
                                 selectedImage === index
                                     ? "ring-e_orange"
                                     : "ring-transparent"
@@ -201,11 +235,14 @@ function Lightbox(props: {
     }
     if (isLightboxOpen) {
         return (
-            <div className="lg:flex hidden justify-center items-center flex-col fixed w-screen h-screen bg-black bg-opacity-75 top-0 left-0 z-50" onMouseDown={()=>setIsLightboxOpen(false)}>
+            <div
+                className="lg:flex hidden justify-center items-center flex-col fixed w-screen h-screen bg-black bg-opacity-75 top-0 left-0 z-50"
+                onMouseDown={() => setIsLightboxOpen(false)}
+            >
                 <div className="max-h-full flex flex-col w-[min(32.5vw,40rem)]">
                     <div className="w-full flex justify-end py-2">
                         <button
-                            className="text-white text-3xl"
+                            className="text-white text-3xl hover:text-e_orange transition"
                             onMouseDown={(e) => {
                                 setIsLightboxOpen(false);
                                 e.stopPropagation();
@@ -271,7 +308,7 @@ function Lightbox(props: {
                                     <img
                                         src={item.thumbnail}
                                         alt="image thumbnail"
-                                        className={`transition ${
+                                        className={`transition  hover:opacity-50 ${
                                             selectedImage === index &&
                                             "opacity-30"
                                         }`}
