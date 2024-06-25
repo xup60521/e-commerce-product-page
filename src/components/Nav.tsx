@@ -2,7 +2,7 @@ import Logo from "@/assets/images/logo.svg?react";
 import { IoCartOutline } from "react-icons/io5";
 import Avatar from "@/assets/images/image-avatar.png";
 import Menu from "@/assets/images/icon-menu.svg?react";
-import { Fragment, useState } from "react";
+import { Fragment, useMemo, useState } from "react";
 import type { NavOpen } from "@/utils";
 import { useCartItem } from "./CartItemProvider";
 import TrashCan from "@/assets/images/icon-delete.svg";
@@ -13,6 +13,13 @@ export default function Nav(props: {
     const { setIsMenuOpen } = props;
     const [openCart, setOpenCart] = useState(false);
     const [cartItems, setCartItems] = useCartItem();
+    const total = useMemo(()=>{
+        let t = 0
+        cartItems.forEach(item => {
+            t += item.quantity
+        })
+        return t
+    }, [cartItems])
     return (
         <Fragment>
             <nav
@@ -41,11 +48,12 @@ export default function Nav(props: {
                 )}
                 <div className="flex-grow"></div>
                 <button
-                    className="transition hover -mr-2"
+                    className="transition hover -mr-2 relative"
                     onMouseDown={() => setOpenCart(!openCart)}
                 >
                     <IoCartOutline className="transition size-7 text-e_dark_grayish_blue hover:text-e_very_dark_blue" />
                     <span className="sr-only">shopping cart</span>
+                    {total !== 0 && <span className="absolute font-kumbh text-[0.5rem] rounded-full px-[5px] -translate-y-7 bg-e_orange text-white h-3">{total}</span>}
                 </button>
                 <div className="rounded-full aspect-square lg:size-10 size-8 hover:ring-2 transition cursor-pointer ring-e_orange">
                     <img src={Avatar} alt="avatar" className="" />
