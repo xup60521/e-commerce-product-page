@@ -41,7 +41,7 @@ type SelectedImage = 0 | 1 | 2 | 3;
 export default function Product() {
     const [selectedImage, setSelectedImage] = useState<SelectedImage>(0);
     return (
-        <div className="w-full flex lg:flex-row flex-col px-8 py-16 bg-white">
+        <div className="w-full flex lg:flex-row flex-col lg:px-8 lg:py-16 bg-white">
             <DisplayImages
                 selectedImage={selectedImage}
                 setSelectedImage={setSelectedImage}
@@ -53,19 +53,19 @@ export default function Product() {
 
 function ProductDetail() {
     return (
-        <div className="flex flex-col lg:w-[60%] justify-center pl-[10%]">
+        <div className="flex flex-col lg:w-[60%] justify-center lg:pl-[10%] px-6 lg:py-0 py-2">
             <span className="font-kumbh text-e_dark_grayish_blue font-semibold tracking-wider py-4 text-sm">
                 {"Sneaker Company".toUpperCase()}
             </span>
-            <h2 className="text-[2.5rem] font-kumbh font-bold leading-10">
+            <h2 className="lg:text-[2.5rem] text-3xl font-kumbh font-bold leading-10">
                 Fall Limited Edition Sneakers
             </h2>
-            <p className="font-kumbh text-e_dark_grayish_blue py-8">
+            <p className="font-kumbh text-e_dark_grayish_blue lg:py-8 pt-4 pb-8">
                 These low-profile sneakers are your perfect casual wear
                 companion. Featuring a durable rubber outer sole, they’ll
                 withstand everything the weather can offer.
             </p>
-            <div className="flex flex-col gap-2 -mt-2">
+            <div className="flex lg:flex-col flex-row lg:items-start items-end justify-between gap-2 lg:-mt-2">
                 <div className="flex gap-4 items-end">
                     <span className="font-kumbh font-bold text-lg">
                         $125.00
@@ -78,13 +78,13 @@ function ProductDetail() {
                     $250.00
                 </span>
             </div>
-            <div className="flex items-center gap-4 py-8">
-                <div className="flex items-center overflow-hidden flex-shrink-0 bg-e_light_grayish_blue rounded-lg">
+            <div className="flex lg:flex-row flex-col items-center gap-4 py-8 pb-20">
+                <div className="flex items-center overflow-hidden flex-shrink-0 bg-e_light_grayish_blue rounded-lg lg:w-fit w-full">
                     <button className="px-3 py-4 transition hover:opacity-50">
                         <Minus />
                         <span className="sr-only">decrement 1 item</span>
                     </button>
-                    <span className="px-6 font-kumbh text-black text-sm font-bold">
+                    <span className="px-6 font-kumbh text-black text-sm font-bold lg:flex-grow-0 flex-grow text-center">
                         0
                     </span>
                     <button className="px-3 py-4 transition hover:opacity-50">
@@ -92,7 +92,7 @@ function ProductDetail() {
                         <span className="sr-only">increment 1 item</span>
                     </button>
                 </div>
-                <button className="bg-e_orange flex-grow font-kumbh flex items-center justify-center gap-4 h-full rounded-lg font-bold transition hover:opacity-70">
+                <button className="bg-e_orange flex-grow lg:w-fit w-full font-kumbh flex items-center justify-center gap-4 h-full rounded-lg font-bold transition hover:opacity-70 py-3 drop-shadow-md shadow-e_orange">
                     <IoCartOutline />
                     <span className="font-kumbh text-sm">Add to cart</span>
                 </button>
@@ -117,17 +117,43 @@ function DisplayImages(props: {
             />
             <div className="flex flex-col lg:w-[40%] gap-6 flex-shrink-0">
                 <button
-                    className="rounded-2xl overflow-hidden"
+                    className="lg:rounded-2xl overflow-hidden relative"
                     onMouseDown={() => setIsLightboxOpen(!isLightboxOpen)}
                 >
                     <img
                         src={images[selectedImage].lg_photo}
                         alt="preview image"
-                        className=""
+                        className="lg:aspect-auto aspect-[4/3] object-cover object-center"
                     />
                     <span className="sr-only">open lightbox</span>
+                    <button
+                            className="absolute left-0 top-[50%] -translate-y-[50%] translate-x-[25%] lg:hidden bg-white size-10 rounded-full flex items-center justify-center text-lg transition hover:text-e_orange"
+                            onMouseDown={() =>
+                                setSelectedImage(
+                                    selectedImage === 0
+                                        ? 3
+                                        : ((selectedImage - 1) as SelectedImage)
+                                )
+                            }
+                        >
+                            <FaChevronLeft />
+                            <span className="sr-only">preview image</span>
+                        </button>
+                        <button
+                            className="absolute right-0 top-[50%] -translate-y-[50%] -translate-x-[25%] lg:hidden bg-white size-10 rounded-full flex items-center justify-center text-lg transition hover:text-e_orange"
+                            onMouseDown={() =>
+                                setSelectedImage(
+                                    selectedImage === 3
+                                        ? 0
+                                        : ((selectedImage + 1) as SelectedImage)
+                                )
+                            }
+                        >
+                            <FaChevronRight />
+                            <span className="sr-only">next image</span>
+                        </button>
                 </button>
-                <div className="grid grid-cols-4 gap-6">
+                <div className="lg:grid grid-cols-4 gap-6 hidden">
                     {images.map((item, index) => (
                         <button
                             key={`imagesdsdasd ${item.lg_photo}`}

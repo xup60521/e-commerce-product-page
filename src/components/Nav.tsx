@@ -12,7 +12,7 @@ export default function Nav(props: {
     return (
         <Fragment>
             <nav
-                className={`w-full flex items-center lg:gap-12 gap-8 lg:border-b-[1px] border-e_grayish_blue lg:p-0 py-4 px-6 transition bg-white`}
+                className={`w-full flex items-center lg:gap-12 gap-8 lg:border-b-[1px] border-e_grayish_blue lg:p-0 py-6 px-6 transition bg-white`}
             >
                 <button
                     className="lg:hidden block -mr-4 translate-y-[2px]"
