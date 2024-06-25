@@ -41,7 +41,7 @@ type SelectedImage = 0 | 1 | 2 | 3;
 export default function Product() {
     const [selectedImage, setSelectedImage] = useState<SelectedImage>(0);
     return (
-        <div className="w-full flex lg:flex-row flex-col px-8 py-16">
+        <div className="w-full flex lg:flex-row flex-col px-8 py-16 bg-white">
             <DisplayImages
                 selectedImage={selectedImage}
                 setSelectedImage={setSelectedImage}
